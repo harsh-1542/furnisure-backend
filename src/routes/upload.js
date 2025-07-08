@@ -4,8 +4,10 @@ import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import path from "path";
 import fs from "fs";
+import dotenv from "dotenv";
 
 const router = express.Router();
+dotenv.config();
 
 // Ensure the uploads directory exists
 const uploadDir = path.join(process.cwd(), "uploads");
@@ -58,6 +60,10 @@ router.post("/", upload.single("file"), (req, res) => {
   }
   // Return the Cloudinary URL to access the uploaded image
   const url = req.file.path;
+
+  console.log("====image url================================");
+  console.log(url);
+  console.log("====================================");
   res.json({ url });
 });
 

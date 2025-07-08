@@ -180,7 +180,9 @@ export const createOrder = async (req, res) => {
       ip_address,
     } = req.body;
 
-    console.log("=======create order body in new function =============================");
+    console.log(
+      "=======create order body in new function ============================="
+    );
     console.log(req.body);
     console.log("====================================");
 
@@ -317,7 +319,6 @@ export const createOrder = async (req, res) => {
   }
 };
 
-
 // export const createOrder = async (req, res) => {
 //   try {
 //     const {
@@ -405,9 +406,6 @@ export const createOrder = async (req, res) => {
 //     res.status(500).json({ error: error.message });
 //   }
 // };
-
-
-
 
 // Update order status (admin only)
 export const updateOrderStatus = async (req, res) => {
