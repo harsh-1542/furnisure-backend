@@ -61,9 +61,9 @@ router.post("/", upload.single("file"), (req, res) => {
   // Return the Cloudinary URL to access the uploaded image
   const url = req.file.path;
 
-  console.log("====image url================================");
-  console.log(url);
-  console.log("====================================");
+  // console.log("====image url================================");
+  // console.log(url);
+  // console.log("====================================");
   res.json({ url });
 });
 
