@@ -20,8 +20,9 @@ const formatOrderForFrontend = (order) => {
     payment_method: order.payment_method,
     payment_status: order.payment_status,
     payment_reference_id: order.payment_reference_id || "",
+    razorpay_order_id: order.razorpay_order_id || "",
+    payment_error_message: order.payment_error_message || "",
     status: order.status,
-
     created_at: order.created_at,
     updated_at: order.updated_at,
     items: (order.items || []).map((item) => ({
@@ -160,11 +161,45 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-// Create new order
+/**
+ * Create a new order
+ * @param {Object} orderData
+ * @param {string} orderData.customer_name
+ * @param {string} orderData.email
+ * @param {string} orderData.phone
+ * @param {string} orderData.address
+ * @param {string} orderData.pincode
+ * @param {number} orderData.total_amount
+ * @param {'cod'|'gateway'} orderData.payment_method
+ * @param {'pending'|'paid'|'failed'|'unverified'} orderData.payment_status
+ * @param {Array<{product_id: string, quantity: number, price: number, selected_set: boolean}>} orderData.items
+ * @param {string} [orderData.delivery_instructions]
+ * @param {string|null} [orderData.payment_reference_id]
+ * @param {string|null} [orderData.razorpay_order_id]
+ * @param {string} [orderData.user_id]
+ * @param {string} orderData.ip_address
+ * @param {string|null} [orderData.payment_error_message]
+ */
 export const createOrder = async (req, res) => {
   try {
+    /** @type {{
+      customer_name: string;
+      email: string;
+      phone: string;
+      address: string;
+      pincode: string;
+      total_amount: number;
+      payment_method: 'cod' | 'gateway';
+      payment_status: 'pending' | 'paid' | 'failed' | 'unverified';
+      items: Array<{ product_id: string; quantity: number; price: number; selected_set: boolean; }>;
+      delivery_instructions?: string;
+      payment_reference_id?: string | null;
+      razorpay_order_id?: string | null;
+      user_id?: string;
+      ip_address: string;
+      payment_error_message?: string | null;
+    }} */
     const {
-      // optional: ObjectId of existing customer
       customer_name,
       email,
       phone,
@@ -174,17 +209,19 @@ export const createOrder = async (req, res) => {
       payment_method,
       payment_status,
       items,
-      delivery_instructions,
-      payment_reference_id,
-      user_id,
+      delivery_instructions = "",
+      payment_reference_id = null,
+      razorpay_order_id = null,
+      user_id = null,
       ip_address,
+      payment_error_message = null,
     } = req.body;
 
-    console.log(
-      "=======create order body in new function ============================="
-    );
-    console.log(req.body);
-    console.log("====================================");
+    // console.log(
+    //   "=======create order body in new function ============================="
+    // );
+    // console.log(req.body);
+    // console.log("====================================");
 
     // Validate items array
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -273,6 +310,8 @@ export const createOrder = async (req, res) => {
       delivery_instructions,
       payment_reference_id:
         payment_method === "cod" ? null : payment_reference_id,
+      razorpay_order_id,
+      payment_error_message,
       user_id,
       status: "new",
       ip_address,

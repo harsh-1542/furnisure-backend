@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-
-
 const orderSchema = new mongoose.Schema(
   {
     // Either existing customer or guest info
@@ -32,10 +30,12 @@ const orderSchema = new mongoose.Schema(
     },
     payment_status: {
       type: String,
-      enum: ["pending", "paid", "failed", "refunded"],
+      enum: ["pending", "paid", "failed", "refunded", "unverified"],
       default: "pending",
     },
+    razorpay_order_id: { type: String, default: null },
     payment_reference_id: { type: String, default: null },
+    payment_error_message: { type: String, default: null },
 
     // Status
     status: {

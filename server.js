@@ -9,6 +9,8 @@ import authRoutes from "./src/routes/auth.js";
 import inventoryRoutes from "./src/routes/inventory.js";
 import orderRoutes from "./src/routes/orders.js";
 import uploadRoutes from "./src/routes/upload.js";
+import contactRoutes from "./src/routes/contact.js";
+import paymentRoutes from "./src/routes/payment.js";
 // Only admin can get customers data
 import { authorize, protect, isAdmin } from "./src/middleware/auth.js";
 import authRoutesModule from "./src/routes/auth.js";
@@ -17,6 +19,13 @@ import authRoutesModule from "./src/routes/auth.js";
 dotenv.config();
 
 const app = express();
+
+// export const instance = new Razorpay({
+//   key_id: process.env.RAZORPAY_KEY_ID,
+//   key_secret: process.env.RAZORPAY_SECRET,
+// });
+
+// instance.orders.all().then(console.log).catch(console.error);
 
 // Middleware
 app.use(cors());
@@ -30,6 +39,9 @@ app.use("/uploads", express.static("uploads"));
 // Upload route
 app.use("/api/upload", uploadRoutes);
 
+// Contact route
+app.use("/api/contact", contactRoutes);
+
 // Public routes
 app.use("/api/auth", authRoutes);
 
@@ -38,12 +50,18 @@ app.use("/api/admin", protect, isAdmin, authRoutes);
 // Protected routes
 app.use("/api/products", inventoryRoutes);
 app.use("/api/orders", protect, orderRoutes);
+app.use("/api/payment",protect, paymentRoutes);
+
+app.post("/payment/process", (req, res) => {
+  res.status(200).json({
+    success: true,
+  });
+});
 
 // Root route
 app.get("/", (req, res) => {
   res.send("Welcome to the Furniture Store API");
 });
-
 
 app.use("*", (req, res) => {
   res.status(404).json({ message: "Route not found" });

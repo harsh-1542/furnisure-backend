@@ -84,9 +84,9 @@ export const login = async (req, res) => {
 export const profile = async (req, res) => {
   try {
     const user = await ClerkUser.findOne({ clerkId: req.user.id });
-    console.log('====================================');
-    console.log(user);
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log(user);
+    // console.log('====================================');
 
     // Determine isAdmin property for frontend
     const isAdmin = user.role === "admin" || user.isAdmin === true;
@@ -127,14 +127,14 @@ export const checkEmail = async (req, res) => {
 // Fetch all customers (users with role 'user')
 export const fetchAllCustomers = async (req, res) => {
   try {
-    console.log("====================================");
-    console.log("fetching all customers");
-    console.log("====================================");
+    // console.log("====================================");
+    // console.log("fetching all customers");
+    // console.log("====================================");
     const customers = await ClerkUser.find();
 
-    console.log("========customers============================");
-    console.log(customers);
-    console.log("====================================");
+    // console.log("========customers============================");
+    // console.log(customers);
+    // console.log("====================================");
     res.json(customers);
   } catch (err) {
     console.error(err);
